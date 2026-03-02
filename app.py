@@ -1,42 +1,47 @@
 import streamlit as st
 
-# Uygulama Başlığı ve Konsepti
-st.set_page_config(page_title="Tekno Genç Universal V1", page_icon="⚛️")
+# 1. KAPAK VE SAYFA AYARLARI (İkon ve Başlık burada değişiyor)
+st.set_page_config(
+    page_title="Tekno Genç Universal V1",
+    page_icon="🚀",
+    layout="centered"
+)
 
-st.title("🚀 Tekno Genç Universal V1")
-st.subheader("Evrensel Bilim ve Mühendislik Motoru")
+# 2. HAVALI BİR GİRİŞ (Banner yerine emoji ve büyük başlık)
+st.markdown("<h1 style='text-align: center; color: #FF4B4B;'>🛰️ TEKNO GENÇ UNIVERSAL</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'><b>Milli Teknoloji Hamlesi Mühendislik Motoru</b></p>", unsafe_allow_html=True)
 
-# Yan Menü (Sidebar)
-st.sidebar.header("🔬 Laboratuvar Seçimi")
-mod = st.sidebar.selectbox("Hangi alanda çalışacaksın?", ["Fizik Motoru", "Kimya & Atom"])
-
-if mod == "Fizik Motoru":
-    st.header("⚡ Fiziksel Analiz")
-    st.write("Kuvvet, kütle ve ivme hesaplamaları yapabilirsin.")
-    
-    m = st.number_input("Kütle (kg):", min_value=0.0, value=1.0)
-    a = st.number_input("İvme (m/s²):", min_value=0.0, value=0.0)
-    
-    if st.button("Hesapla"):
-        f = m * a
-        st.success(f"Hesaplanan Kuvvet (F): {f} Newton")
-        st.info("Formül: F = m * a")
-
-elif mod == "Kimya & Atom":
-    st.header("⚛️ Atomik Laboratuvar")
-    st.write("Elementleri ve atomik yapıları tanı.")
-    
-    element = st.selectbox("Bir element seç:", ["Hidrojen (H)", "Helyum (He)", "Lityum (Li)"])
-    
-    if element == "Hidrojen (H)":
-        st.write("**Atom Numarası:** 1")
-        st.write("**Özellik:** Evrendeki en hafif ve en çok bulunan element.")
-    elif element == "Helyum (He)":
-        st.write("**Atom Numarası:** 2")
-        st.write("**Özellik:** Soygazdır, yanıcı değildir.")
-    elif element == "Lityum (Li)":
-        st.write("**Atom Numarası:** 3")
-        st.write("**Özellik:** En hafif metaldir, pillerde kullanılır.")
+# 3. ÜST KAPAK GÖRSELİ (Teknoloji temalı)
+st.image("https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")
 
 st.divider()
-st.caption("Tekno Genç V1 - Geleceği Kodlayan Gençlik")
+
+# Yan Menü Tasarımı
+with st.sidebar:
+    st.title("⚙️ Kontrol Paneli")
+    mod = st.radio("Laboratuvar Seç:", ["Fizik Motoru", "Kimya & Atom"])
+    st.info("Sürüm: V1.0.0\nCEO: Kağan Alp")
+
+if mod == "Fizik Motoru":
+    st.header("⚡ Fiziksel Analiz Sistemi")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        m = st.number_input("Kütle (kg):", value=1.0)
+    with col2:
+        a = st.number_input("İvme (m/s²):", value=0.0)
+    
+    if st.button("HESAPLA 🔥"):
+        f = m * a
+        st.balloons() # Başarıyı balonlarla kutla!
+        st.success(f"Hesaplanan Kuvvet: {f:,.2f} Newton")
+        st.metric(label="Kuvvet Çıkışı (F)", value=f"{f:,.2f} N", delta="Aktif")
+
+elif mod == "Kimya & Atom":
+    st.header("⚛️ Atomik Veri Merkezi")
+    element = st.selectbox("Elementi Seç:", ["Hidrojen", "Helyum", "Lityum"])
+    # Burayı ileride seninle dev bir kütüphaneye çevireceğiz.
+    st.write(f"{element} elementi için veriler analiz ediliyor...")
+
+st.divider()
+st.write("🇹🇷 *Gelecek, onu bugünden kodlayanlarındır.*")
