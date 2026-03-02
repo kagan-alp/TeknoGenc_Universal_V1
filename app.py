@@ -1,47 +1,50 @@
 import streamlit as st
+import time
 
-# 1. KAPAK VE SAYFA AYARLARI (İkon ve Başlık burada değişiyor)
-st.set_page_config(
-    page_title="Tekno Genç Universal V1",
-    page_icon="🚀",
-    layout="centered"
-)
+# Sayfa Ayarları
+st.set_page_config(page_title="Tekno Genç AI Asistan", page_icon="🤖")
 
-# 2. HAVALI BİR GİRİŞ (Banner yerine emoji ve büyük başlık)
-st.markdown("<h1 style='text-align: center; color: #FF4B4B;'>🛰️ TEKNO GENÇ UNIVERSAL</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'><b>Milli Teknoloji Hamlesi Mühendislik Motoru</b></p>", unsafe_allow_html=True)
+# Robot Karakteri ve Başlık
+st.markdown("<h1 style='text-align: center;'>🤖 TEKNO GENÇ AI V1</h1>", unsafe_allow_html=True)
+st.write("---")
 
-# 3. ÜST KAPAK GÖRSELİ (Teknoloji temalı)
-st.image("https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")
+# Yapay Zeka Hafızası (Sohbet Geçmişi)
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-st.divider()
+# Eski mesajları ekrana bas
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# Yan Menü Tasarımı
-with st.sidebar:
-    st.title("⚙️ Kontrol Paneli")
-    mod = st.radio("Laboratuvar Seç:", ["Fizik Motoru", "Kimya & Atom"])
-    st.info("Sürüm: V1.0.0\nCEO: Kağan Alp")
+# Kullanıcıdan Soru Al (Chat Input)
+if prompt := st.chat_input("Bana bir bilimsel soru sor..."):
+    # Kullanıcı mesajını göster ve kaydet
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
-if mod == "Fizik Motoru":
-    st.header("⚡ Fiziksel Analiz Sistemi")
+    # Robotun Cevap Hazırlama Alanı
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        
+        # Burası Robotun 'Düşünme' simülasyonu
+        if "kuvvet" in prompt.lower() or "fizik" in prompt.lower():
+            robot_cevap = "Fizik analizi yapılıyor... Girdiğin verilere göre evrensel çekim yasalarını kontrol ettim. Sorun üzerinde derinlemesine çalışıyorum!"
+        elif "atom" in prompt.lower() or "kimya" in prompt.lower():
+            robot_cevap = "Atomik yapıyı inceliyorum. Çekirdek ve elektron dizilimlerine bakılırsa, sorduğun element oldukça enerjik görünüyor."
+        else:
+            robot_cevap = f"'{prompt}' konusunu veri tabanımda analiz ettim. Ben Tekno Genç AI olarak bu konuda sana rehberlik edebilirim. Ne öğrenmek istersin?"
+
+        # Cevabı kelime kelime yazdır (Yapay zeka yazıyor hissi)
+        for chunk in robot_cevap.split():
+            full_response += chunk + " "
+            time.sleep(0.1)
+            message_placeholder.markdown(full_response + "▌")
+        
+        message_placeholder.markdown(full_response)
     
-    col1, col2 = st.columns(2)
-    with col1:
-        m = st.number_input("Kütle (kg):", value=1.0)
-    with col2:
-        a = st.number_input("İvme (m/s²):", value=0.0)
-    
-    if st.button("HESAPLA 🔥"):
-        f = m * a
-        st.balloons() # Başarıyı balonlarla kutla!
-        st.success(f"Hesaplanan Kuvvet: {f:,.2f} Newton")
-        st.metric(label="Kuvvet Çıkışı (F)", value=f"{f:,.2f} N", delta="Aktif")
+    # Robotun cevabını hafızaya kaydet
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-elif mod == "Kimya & Atom":
-    st.header("⚛️ Atomik Veri Merkezi")
-    element = st.selectbox("Elementi Seç:", ["Hidrojen", "Helyum", "Lityum"])
-    # Burayı ileride seninle dev bir kütüphaneye çevireceğiz.
-    st.write(f"{element} elementi için veriler analiz ediliyor...")
-
-st.divider()
-st.write("🇹🇷 *Gelecek, onu bugünden kodlayanlarındır.*")
